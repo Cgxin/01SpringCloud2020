@@ -1,0 +1,33 @@
+server:
+  port: 2003
+spring:
+  application:
+    name: seata-account-service
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
+    url: jdbc:mysql://localhost:3306/seata_account?useUnicode-true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  # 配置Nacos地址
+    alibaba:
+      seata:
+      #自定义事务组名称需要与 seata-server中的对应,   conf 里面的file.conf,  没有的写 default
+#        tx-service-group: fsp_tx_group
+        tx-service-group: default
+
+mybatis:
+  # mapper 放到 src/java/ 下 需要在 pom 加配置.
+  mapper-locations: classpath:com/atguigu/springcloud/mapper/*.xml
+
+feign:
+  hystrix:
+    enabled: false
+
+logging:
+  level:
+    io:
+      seata: info

@@ -1,0 +1,35 @@
+server:
+  port: 3355
+
+spring:
+  application:
+    name: config-client
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
+    url: jdbc:mysql://localhost:3306/cloud2020?useUnicode-true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: cloud
+    password: 123456
+  cloud:
+    config:
+      label: master #分支名称
+      name: config #配置文件名称
+      prodile: dev #读取后缀名称 上述3个综合: master分支上 config-dev.yml  （name-prodile.yml） 配置文件被读取 http://config-3344.com:3344/master/config-dev.yml
+      uri: http://localhost:3344 #配置中心地址
+  #rabbitmq相关配置
+  rabbitmq:
+    host: locahost
+    port: 5672
+    username: guest
+    password: guest
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+#暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

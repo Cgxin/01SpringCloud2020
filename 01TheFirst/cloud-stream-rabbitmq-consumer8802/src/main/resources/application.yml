@@ -1,0 +1,41 @@
+server:
+  port: 8802
+
+spring:
+  application:
+    name: cloud-stream-consumer
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource            # 当前数据源操作类型
+    driver-class-name: com.mysql.cj.jdbc.Driver             # mysql驱动包
+    url: jdbc:mysql://localhost:3306/cloud2020?useUnicode-true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: cloud
+    password: 123456
+  cloud:
+    stream:
+      binders: #在此处配置要绑定的rabbitmq的服务信息
+        defaultRabbit: #表示定义的名称, 用于binding绑定
+          type: rabbit #消息组件类型
+          environment: #设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings: #服务的整合处理
+        input: #这个名称是一个通道的名称,  消费者 input  生产者 output
+          destination: studyExchange #表示要使用的 Exchange名称定义
+          content-type: application/json #设置消息类型, 本次为 json, 文本则设置 text/json
+          binder: defaultRabbit #表示要绑定的消息服务的具体设置
+          group: atguiguA #解决重复消费
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  instance:
+    instance-id: receive-8802.com #localhost:7001 status 的名称.
+    prefer-ip-address: true     #访问路径显示 ip
+    #Eureka客户端向服务端发送心跳的时间间隔, 单位为妙(默认是30s)
+    lease-renewal-interval-in-seconds: 2
+    #Eureka服务端在收到最后一次心跳后等待时间上限, 单位为秒(默认是90s), 超时将剔除服务.
+    lease-expiration-duration-in-seconds: 5
